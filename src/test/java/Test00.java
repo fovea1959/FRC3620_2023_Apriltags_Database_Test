@@ -16,7 +16,6 @@ public class Test00 {
     public void t00() throws IOException {
         AprilTagFieldLayout a = TestAprilTags.getAprilTagFieldLayout();
         System.out.println(a);
-        a.serialize ("test_apriltags.json");
 
         System.out.println(a.getTagPose(0).orElse(null));
         Optional o1 = a.getTagPose(1);
