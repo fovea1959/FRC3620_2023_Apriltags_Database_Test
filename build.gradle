@@ -95,4 +95,8 @@ test {
     useJUnit()
 
     maxHeapSize = '1G'
+
+    filter {
+        includeTestsMatching "FieldCalculations*"
+    }
 }
