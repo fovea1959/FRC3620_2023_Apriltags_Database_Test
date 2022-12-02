@@ -1,8 +1,6 @@
 import java.io.*;
 import java.util.*;
 
-import javax.xml.validation.ValidatorHandler;
-
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
@@ -11,9 +9,9 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.Num;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.numbers.N4;
 import edu.wpi.first.math.util.Units;
@@ -28,16 +26,24 @@ public class TestGenerateJsonAverageJoesFakeField {
 
     @Test
     public void t_matrix() throws JsonProcessingException {
-        Quaternion q = new Quaternion(0.7071, 0, 0, 0.7071);
-        Rotation3d r = new Rotation3d(q);
-        Pose3d p = new Pose3d(0, 0, 0, r);
-        System.out.println (matrix1(p));
-        System.out.println (new ObjectMapper().writeValueAsString(j(matrix1(p))));
-        System.out.println (matrix2(p));
-        System.out.println (new ObjectMapper().writeValueAsString(j(matrix2(p))));
+        // tested against https://ninja-calc.mbedded.ninja/calculators/mathematics/geometry/3d-rotations
+        t_matrix1(new Quaternion(0.7071067811865476, 0, 0, 0.7071067811865476));
+        t_matrix1(new Quaternion(1, 0, 0, 0));
     }
 
-    //@Test
+    public void t_matrix1 (Quaternion q) throws JsonProcessingException {
+        Rotation3d r = new Rotation3d(q);
+        Pose3d p = new Pose3d(0, 0, 0, r);
+        System.out.println(q);
+        System.out.println("matrix1");
+        System.out.println (matrix1(p));
+        // System.out.println (new ObjectMapper().writeValueAsString(j(matrix1(p))));
+        System.out.println("matrix2");
+        System.out.println (matrix2(p));
+        // System.out.println (new ObjectMapper().writeValueAsString(j(matrix2(p))));
+    }
+
+    @Test
     public void makeAprilTagFieldLayout() throws IOException, JsonGenerationException, JsonMappingException {
         List<AprilTag> rv = new ArrayList<>();
         rv.add (new AprilTag(0, pose_in_inches(114, 0, 13.5, r3d_faces_north)));
@@ -69,34 +75,13 @@ public class TestGenerateJsonAverageJoesFakeField {
         return new Pose3d(Units.inchesToMeters(x), Units.inchesToMeters(y), Units.inchesToMeters(z), r3d);
     }
 
-
-
-    /*
-    https://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToMatrix/index.htm
-
-    and 
-
-    https://www.flipcode.com/documents/matrfaq.html#Q54
-     *   Assuming that a quaternion has been created in the form:
-
-    Q = |X Y Z W|
-
-  Then the quaternion can then be converted into a 4x4 rotation
-  matrix using the following expression:
-
-
-        |       2     2                                |
-        | 1 - 2Y  - 2Z    2XY - 2ZW      2XZ + 2YW     |
-        |                                              |
-        |                       2     2                |
-    M = | 2XY + 2ZW       1 - 2X  - 2Z   2YZ - 2XW     |
-        |                                              |
-        |                                      2     2 |
-        | 2XZ - 2YW       2YZ + 2XW      1 - 2X  - 2Y  |
-        |                                              |
-    
-        */
-
+    /**
+     * https://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToMatrix/index.htm
+     * and 
+     * https://www.flipcode.com/documents/matrfaq.html#Q54
+     * @param pose
+     * @return
+     */
     static Matrix<N4, N4> matrix1 (Pose3d pose) {
         var t = pose.getTranslation();
         var tx = t.getX();
@@ -109,21 +94,23 @@ public class TestGenerateJsonAverageJoesFakeField {
         var qx = q.getX();
         var qy = q.getY();
         var qz = q.getZ();
+
+        double invs = 1 / (qx*qx + qy*qy + qz*qz + qw*qw);
         
         //# First row of the rotation matrix
-        var r00 = 1 - 2*qy*qy - 2*qz*qz;
-        var r01 = 2 * (qx*qy - qz*qw);
-        var r02 = 2 * (qx*qz + qy*qw);
+        var r00 = (1 - 2*qy*qy - 2*qz*qz) / invs;
+        var r01 = (2 * (qx*qy - qz*qw)) / invs;
+        var r02 = (2 * (qx*qz + qy*qw)) / invs;
         
         // # Second row of the rotation matrix
-        var r10 = 2 * (qx*qy + qz*qw);
-        var r11 = 1 - 2*qx*qx - 2*qz*qz;
-        var r12 = 2 * (qy*qz - qx*qw);
+        var r10 = (2 * (qx*qy + qz*qw)) / invs;
+        var r11 = (1 - 2*qx*qx - 2*qz*qz) / invs;
+        var r12 = (2 * (qy*qz - qx*qw)) / invs;
         
         // # Third row of the rotation matrix
-        var r20 = 2 * (qx*qz - qy*qw);
-        var r21 = 2 * (qy*qz + qx*qw);
-        var r22 = 1 - 2*qx*qx - 2*qy*qy;
+        var r20 = (2 * (qx*qz - qy*qw)) / invs;
+        var r21 = (2 * (qy*qz + qx*qw)) / invs;
+        var r22 = (1 - 2*qx*qx - 2*qy*qy) / invs;
 
         Matrix<N4, N4> m = Matrix.mat(Nat.N4(), Nat.N4()).fill (
             r00, r01, r02, tx,
@@ -133,9 +120,6 @@ public class TestGenerateJsonAverageJoesFakeField {
         
         return m;
     }
-
-    // * https://automaticaddison.com/how-to-convert-a-quaternion-to-a-rotation-matrix/
-
 
     /**
      * https://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToMatrix/index.htm
@@ -190,7 +174,7 @@ public class TestGenerateJsonAverageJoesFakeField {
 
 
 
-    static public List<List<Double>> j (Matrix m) {
+    static public List<List<Double>> j (Matrix<? extends Num,? extends Num> m) {
         List<List<Double>> rv = new ArrayList<>();
         for (int i = 0; i < m.getNumRows(); i++) {
             List<Double> r = new ArrayList<>();
@@ -210,13 +194,15 @@ public class TestGenerateJsonAverageJoesFakeField {
     static class TagTrackerTag {
         public double size;
         public int id;
-        public List<List<Double>> transform;
+        public List<List<Double>> transform1;
+        public List<List<Double>> transform2;
         public Quaternion q;
 
         TagTrackerTag (int id, double size, Pose3d pose) {
             this.id = id;
             this.size = size;
-            this.transform = j(matrix2(pose));
+            this.transform1 = j(matrix1(pose));
+            this.transform2 = j(matrix2(pose));
             this.q = pose.getRotation().getQuaternion();
         }
     }
