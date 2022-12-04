@@ -6,7 +6,7 @@ import org.junit.Test;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import frc.robot.TestAprilTags;
 
 /** Add your docs here. */
@@ -18,7 +18,7 @@ public class Test00 {
         System.out.println(a);
 
         System.out.println(a.getTagPose(0).orElse(null));
-        Optional o1 = a.getTagPose(1);
+        Optional<Pose3d> o1 = a.getTagPose(1);
         System.out.println(o1.get());
 
     }

@@ -7,7 +7,8 @@ import org.junit.Test;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.apriltag.*;
+import edu.wpi.first.apriltag.*;
+import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
 
 public class TestGenerateJson2022Field {
     static AprilTagFieldLayout official, mine;
@@ -23,7 +24,7 @@ public class TestGenerateJson2022Field {
         }
     }
 
-    //@Test
+    @Test
     public void t00_compareall() throws Exception {
         compare(Alliance.Red, 0);
         compare(Alliance.Blue, 10);
@@ -36,8 +37,9 @@ public class TestGenerateJson2022Field {
     }
 
     void compare (Alliance a, int id) {
-        official.setAlliance(a);
-        mine.setAlliance(a);
+        OriginPosition origin = (a == Alliance.Blue) ? AprilTagFieldLayout.OriginPosition.kBlueAllianceWallRightSide : AprilTagFieldLayout.OriginPosition.kRedAllianceWallRightSide;
+        official.setOrigin(origin);
+        mine.setOrigin(origin);
         System.err.println (a.toString() + " " + id);
         System.err.println (official.getTagPose(id));
         System.err.println (mine.getTagPose(id));

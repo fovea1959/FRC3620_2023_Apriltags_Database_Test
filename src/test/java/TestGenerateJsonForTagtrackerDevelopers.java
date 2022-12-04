@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.apriltag.*;
+import edu.wpi.first.apriltag.*;
 
 public class TestGenerateJsonForTagtrackerDevelopers {
     @Test
@@ -13,6 +13,8 @@ public class TestGenerateJsonForTagtrackerDevelopers {
         AprilTagFieldLayout a = getAprilTagFieldLayout();
         a.serialize ("test_apriltags.json");
         AprilTagFieldLayout a2 = new AprilTagFieldLayout("test_apriltags.json");
+        System.out.println (a.getTagPose(1));
+        System.out.println (a2.getTagPose(1));
     }
 
     static Rotation3d r3d_westwall = new Rotation3d(0, Units.degreesToRadians(-90), 0);

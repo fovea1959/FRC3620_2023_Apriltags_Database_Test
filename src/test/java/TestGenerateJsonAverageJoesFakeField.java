@@ -15,7 +15,7 @@ import edu.wpi.first.math.Num;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.numbers.N4;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.apriltag.*;
+import edu.wpi.first.apriltag.*;
 
 public class TestGenerateJsonAverageJoesFakeField {
     // the blue wall
@@ -56,7 +56,8 @@ public class TestGenerateJsonAverageJoesFakeField {
         a.serialize("average_joes_fake_2022.json");
 
         Matrix<N4, N4> m = matrix2(rv.get(0).pose);
-        //System.out.println (m);
+        System.out.println (m);
+        
         ObjectMapper om = new ObjectMapper();
         om.enable(SerializationFeature.INDENT_OUTPUT);
         //System.out.println (om.writeValueAsString(m));
