@@ -1,5 +1,3 @@
-import java.security.InvalidParameterException;
-
 import org.junit.Test;
 
 import edu.wpi.first.math.geometry.Translation2d;
@@ -28,7 +26,7 @@ public class FieldCalculationsTest {
     }
 
     Translation2d average (Translation2d... t) {
-        if (t.length == 0) throw new InvalidParameterException("zero length argument list");
+        if (t.length == 0) throw new IllegalArgumentException("zero length argument list");
         double x = 0.0;
         double y = 0.0;
         for (Translation2d t1 : t) {
