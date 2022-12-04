@@ -54,7 +54,7 @@ public class FieldCalculations {
     public static Translation2d locateViaTarget (Translation2d target, double x, double y, double robotHeadingInRadians) {
         Translation2d robotToTargetTranslationRelative = new Translation2d(x, y);
         Translation2d robotToTargetTranslationAbsolute = robotToTargetTranslationRelative.rotateBy(Rotation2d.fromRadians(robotHeadingInRadians));
-        Translation2d targetToRobotTranslationAbsolute = robotToTargetTranslationAbsolute.rotateBy(Rotation2d.fromDegrees(180));
+        Translation2d targetToRobotTranslationAbsolute = robotToTargetTranslationAbsolute.times(-1.0);
         Translation2d rv = target.plus(targetToRobotTranslationAbsolute);
         return rv;
     }
