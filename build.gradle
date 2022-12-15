@@ -1,6 +1,6 @@
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2023.1.1-beta-4"
+    id "edu.wpi.first.GradleRIO" version "2023.1.1-beta-6"
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -66,7 +66,7 @@ dependencies {
     simulationRelease wpi.sim.enableRelease()
 
     // temporary to work around beta4 packaging oopsie
-    implementation(group: 'edu.wpi.first.apriltags', name: 'apriltags-java', version: '2023.1.1-beta-4')
+    //implementation(group: 'edu.wpi.first.apriltags', name: 'apriltags-java', version: '2023.1.1-beta-4')
 
     testImplementation 'junit:junit:4.13.1'
 }
@@ -100,6 +100,17 @@ test {
     maxHeapSize = '1G'
 
     filter {
-        includeTestsMatching "FieldCalculations*"
+        includeTestsMatching "FieldCalculations*Intersection*"
     }
+}
+
+// this helps junit test results show up in output
+// look at https://stackoverflow.com/a/36130467/17887564 for some more suggestions
+tasks.withType(Test) { 
+  testLogging {
+    exceptionFormat "full"
+    // events "passed", "failed" // , "started", "skipped"
+    showStandardStreams true
+    showExceptions true
+  }
 }
