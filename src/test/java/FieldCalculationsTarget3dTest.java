@@ -1,5 +1,5 @@
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
@@ -98,9 +98,9 @@ public class FieldCalculationsTarget3dTest {
         Translation3d rv = FieldCalculations.locateViaTarget(target, targetFromCamera, Units.degreesToRadians(robotHeadingInDegrees), Units.degreesToRadians(cameraTiltUpInDegrees));
         if (expected != null) {
             try {
-                Assert.assertEquals("X bad", rv.getX(), expected.getX(), 0.01);
-                Assert.assertEquals("Y bad", rv.getY(), expected.getY(), 0.01);
-                Assert.assertEquals("Z bad", rv.getZ(), expected.getZ(), 0.01);
+                Assertions.assertEquals(rv.getX(), expected.getX(), 0.01, "X bad");
+                Assertions.assertEquals(rv.getY(), expected.getY(), 0.01, "Y bad");
+                Assertions.assertEquals(rv.getZ(), expected.getZ(), 0.01, "Z bad");
             } catch (AssertionError e) {
                 System.err.println ("Bad result: " + rv + ", expected " + expected);
                 throw e;

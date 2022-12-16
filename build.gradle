@@ -68,7 +68,11 @@ dependencies {
     // temporary to work around beta4 packaging oopsie
     //implementation(group: 'edu.wpi.first.apriltags', name: 'apriltags-java', version: '2023.1.1-beta-4')
 
-    testImplementation 'junit:junit:4.13.1'
+    // testImplementation 'junit:junit:4.13.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.4.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.4.2'
+
 }
 
 // Simulation configuration (e.g. environment variables).
@@ -95,7 +99,9 @@ tasks.withType(JavaCompile) {
 }
 
 test {
-    useJUnit()
+    useJUnitPlatform()
+    systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
+
 
     maxHeapSize = '1G'
 

@@ -1,8 +1,9 @@
 import java.io.*;
 import java.util.*;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
@@ -13,7 +14,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
 public class TestGenerateJson2022Field {
     static AprilTagFieldLayout official, mine;
 
-    @BeforeClass
+    @BeforeAll
     public static void setup() throws IOException {
         try {
             official = new AprilTagFieldLayout("2022-rapidreact.json");

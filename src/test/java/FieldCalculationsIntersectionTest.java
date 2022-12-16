@@ -1,5 +1,5 @@
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
@@ -48,34 +48,34 @@ public class FieldCalculationsIntersectionTest {
 
         /* we are at (0, 2), test case of both -PI/2, should kaboom */
         rv = triangulate(t00, - Math.PI/2, t01, -Math.PI / 2.0, null);
-        Assert.assertEquals ("(0,2) case 1 failed", null, rv);
+        Assertions.assertEquals (null, rv, "(0,2) case 1 failed");
         System.out.println (rv);
         rv = triangulate(t01, - Math.PI/2, t00, -Math.PI / 2.0, null);
-        Assert.assertEquals ("(0,2) case 2 failed", null, rv);
+        Assertions.assertEquals (null, rv, "(0,2) case 2 failed");
         System.out.println (rv);
 
         /* we are at (-1, 0), test case of both 0 */
         rv = triangulate(t00, 0, t10, 0, null);
-        Assert.assertEquals ("(0,2) case 1 failed", null, rv);
+        Assertions.assertEquals (null, rv, "(0,2) case 1 failed");
         System.out.println (rv);
         rv = triangulate(t10, 0, t00, 0, null);
-        Assert.assertEquals ("(0,2) case 2 failed", null, rv);
+        Assertions.assertEquals (null, rv, "(0,2) case 2 failed");
         System.out.println (rv);
     }
 
     @Test
     public void infMath() {
-        Assert.assertTrue("positive infinity isn't larger than 10000", Double.POSITIVE_INFINITY > 10000);
-        Assert.assertTrue("positive infinity isn't infinite", Double.isInfinite(Double.POSITIVE_INFINITY));
-        Assert.assertTrue("negative infinity isn't infinite", Double.isInfinite(Double.NEGATIVE_INFINITY));
+        Assertions.assertTrue(Double.POSITIVE_INFINITY > 10000, "positive infinity isn't larger than 10000");
+        Assertions.assertTrue(Double.isInfinite(Double.POSITIVE_INFINITY), "positive infinity isn't infinite");
+        Assertions.assertTrue(Double.isInfinite(Double.NEGATIVE_INFINITY),"negative infinity isn't infinite");
     }
 
     Translation2d triangulate (Translation2d a, double heading_a, Translation2d b, double heading_b, Translation2d expected) {
         var rv = FieldCalculations.locateViaTriangulation(a, heading_a, b, heading_b);
         if (expected != null) {
             try {
-                Assert.assertEquals("X bad", rv.getX(), expected.getX(), 0.01);
-                Assert.assertEquals("Y bad", rv.getY(), expected.getY(), 0.01);
+                Assertions.assertEquals(rv.getX(), expected.getX(), 0.01, "X bad");
+                Assertions.assertEquals(rv.getY(), expected.getY(), 0.01, "Y bad");
             } catch (AssertionError e) {
                 System.err.println ("Bad result: " + rv + ", expected " + expected);
                 throw e;
@@ -88,8 +88,8 @@ public class FieldCalculationsIntersectionTest {
         var rv = FieldCalculations.locateViaTriangulationGivenTan(a, tan_a, b, tan_b);
         if (expected != null) {
             try {
-                Assert.assertEquals("X bad", rv.getX(), expected.getX(), 0.01);
-                Assert.assertEquals("Y bad", rv.getY(), expected.getY(), 0.01);
+                Assertions.assertEquals(rv.getX(), expected.getX(), 0.01, "X bad");
+                Assertions.assertEquals(rv.getY(), expected.getY(), 0.01, "Y bad");
             } catch (AssertionError e) {
                 System.err.println ("Bad result: " + rv + ", expected " + expected);
                 throw e;
