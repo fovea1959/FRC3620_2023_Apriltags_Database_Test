@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -64,19 +65,34 @@ public class FieldCalculations {
      * @param robotHeadingInRadians in radians
      * @return
      */
-    public static Translation2d locateViaTarget (Translation2d target, double x, double y, double robotHeadingInRadians) {
+    public static Translation2d locateCameraViaTarget (Translation2d target, double x, double y, double robotHeadingInRadians) {
         Translation2d robotToTargetTranslationRelative = new Translation2d(x, y);
+        return locateCameraViaTarget(target, robotToTargetTranslationRelative, robotHeadingInRadians);
+    }
+
+    public static Translation2d locateCameraViaTarget (Translation2d target, Translation2d robotToTargetTranslationRelative, double robotHeadingInRadians) {
         Translation2d robotToTargetTranslationAbsolute = robotToTargetTranslationRelative.rotateBy(Rotation2d.fromRadians(robotHeadingInRadians));
         Translation2d targetToRobotTranslationAbsolute = robotToTargetTranslationAbsolute.unaryMinus();
         Translation2d rv = target.plus(targetToRobotTranslationAbsolute);
         return rv;
     }
 
-    public static Translation3d locateViaTarget (Translation3d target, Translation3d targetFromCamera, double robotHeadingInRadians, double cameraTiltUpInRadians) {
+    public static Translation3d locateCameraViaTarget (Translation3d target, Translation3d targetFromCamera, double robotHeadingInRadians, double cameraTiltUpInRadians) {
         Translation3d robotToTargetTranslationRotated = targetFromCamera.rotateBy(new Rotation3d(0, -cameraTiltUpInRadians, robotHeadingInRadians));
         Translation3d targetToRobotTranslation = robotToTargetTranslationRotated.unaryMinus();
         Translation3d rv = target.plus(targetToRobotTranslation);
         return rv;
     }
+
+
+    public static Translation3d locateCameraViaTarget (Translation3d target, Pose3d cameraPose, Translation3d targetFromCamera, double robotHeadingInRadians, double cameraTiltUpInRadians) {
+        double cameraTiltUpInRadians = cameraPose.getRotation().getY();
+        double cameraPointLeftInRadians = cameraPose.getRotation().getZ();
+        Translation3d robotToCameraTranslationRotated = targetFromCamera.rotateBy(new Rotation3d(0, -cameraTiltUpInRadians, robotHeadingInRadians));
+        Translation3d targetToRobotTranslation = robotToTargetTranslationRotated.unaryMinus();
+        Translation3d rv = target.plus(targetToRobotTranslation);
+        return rv;
+    }
+
 
 }

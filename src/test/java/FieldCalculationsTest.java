@@ -16,8 +16,8 @@ public class FieldCalculationsTest {
     @Test
     public void test00() {
         Translation2d rv1 = FieldCalculations.locateViaTriangulation(t10, Units.degreesToRadians(-90), t01, Units.degreesToRadians(180));
-        Translation2d rv2 = FieldCalculations.locateViaTarget(t10, 1.1, 0, Units.degreesToRadians(-90));
-        Translation2d rv3 = FieldCalculations.locateViaTarget(t01, 0.9, 0, Units.degreesToRadians(180));
+        Translation2d rv2 = FieldCalculations.locateCameraViaTarget(t10, 1.1, 0, Units.degreesToRadians(-90));
+        Translation2d rv3 = FieldCalculations.locateCameraViaTarget(t01, 0.9, 0, Units.degreesToRadians(180));
         Translation2d rv = average(rv1, rv2, rv3);
         System.out.println (rv1);
         System.out.println (rv2);

@@ -52,7 +52,7 @@ public class FieldCalculationsTargetTest {
     }
 
     Translation2d test (Translation2d target, double x, double y, double robotHeadingInDegrees, Translation2d expected) {
-        Translation2d rv = FieldCalculations.locateViaTarget(target, x, y, Units.degreesToRadians(robotHeadingInDegrees));
+        Translation2d rv = FieldCalculations.locateCameraViaTarget(target, x, y, Units.degreesToRadians(robotHeadingInDegrees));
         if (expected != null) {
             Assertions.assertEquals(rv.getX(), expected.getX(), 0.01, "X bad");
             Assertions.assertEquals(rv.getY(), expected.getY(), 0.01, "Y bad");
