@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import frc.robot.TestAprilTags;
@@ -14,13 +15,16 @@ public class Test00 {
 
     @Test
     public void t00() throws IOException {
-        AprilTagFieldLayout a = TestAprilTags.getAprilTagFieldLayout();
-        System.out.println(a);
+        AprilTagFieldLayout a = TestAprilTags.getAprilTag2023FieldLayout();
 
-        System.out.println(a.getTagPose(0).orElse(null));
-        Optional<Pose3d> o1 = a.getTagPose(1);
-        System.out.println(o1.get());
-
+        for (int i = 1; i <= 8; i++) {
+            Optional<Pose3d> o = a.getTagPose(i);
+            if (o.isPresent()) {
+                Pose3d p = o.get();
+                Translation3d pt_inches = p.getTranslation().times(Units.metersToInches(1));
+                System.out.println (i + " " + pt_inches);
+            }
+        }
     }
 
     @Test
